@@ -1,0 +1,9 @@
+slide:
+- 
+  id: demo
+  audio:
+    name: sound_effect
+-
+  id: ruby_tuesday
+  audio:
+    name: ruby_tuesday

@@ -1,0 +1,143 @@
+sequencer:
+  tempo: 110
+  tracks:
+  - 
+    name: track1
+    notes: 
+      [ 69, 2, 69, 2, 67, 1, 72, 2, 65, 4, 60, 1, 62, 1, 64, 2, 55, 14, 0, 4, 69, 2, 69, 1, 67, 3, 72, 2, 65, 1, 65, 3, 62, 1, 64, 2, 67, 13, 0, 4, 69, 2, 69, 2, 72, 1, 72, 2, 67, 7, 67, 2, 69, 2, 69, 2, 72, 1, 72, 2, 67, 5, 62, 1, 65, 2, 64, 12, 60, 1, 62, 1, 64, 2, 67, 13, 0, 4, 76, 4, 74, 4, 77, 2, 76, 1, 74, 3, 72, 3, 76, 2, 76, 2, 74, 2, 74, 1, 77, 2, 76, 2, 74, 2, 72, 3, 76, 2, 76, 2, 74, 2, 74, 1, 72, 2, 72, 2, 72, 1, 72, 1, 72, 3, 74, 1, 74, 1, 74, 1, 76, 1, 77, 2, 72, 8 ]
+    cv_out:
+      - vco1
+    gate_out:
+      - eg1
+      - eg2
+  - 
+    name: track2
+    notes: 
+      [ 57, 4, 55, 4, 53, 4, 55, 4, 48, 12, 0, 4, 57, 4, 55, 4, 53, 4, 48, 4, 55, 12, 0, 4, 57, 4, 50, 4, 55, 8, 57, 4, 50, 4, 55, 8, 48, 12, 0, 4, 55, 12, 0, 4, 48, 4, 55, 4, 48, 12, 55, 4, 48, 8, 48, 4, 55, 4, 48, 4, 53, 4, 55, 8, 48, 8]
+    cv_out:
+      - vco2
+    gate_out:
+      - eg3
+      - eg4
+  # - 
+    # name: track3
+    # notes: 
+      # [ 69, 2, 62, 2, 69, 2, 62, 2, 67, 2, 62, 2, 67, 2, 62, 2, 69, 3, 67, 1, 67, 4, 69, 3, 67, 1, 67, 4, 57, 4, 55, 4, 53, 4, 48, 4, 55, 12, 0, 4, 57, 4, 50, 4, 55, 8, 57, 4, 50, 4, 55, 8, 48, 12, 0, 4, 55, 12, 0, 4, 48, 4, 55, 4, 48, 12, 55, 4, 48, 8, 48, 4, 55, 4, 48, 4, 53, 4, 55, 8, 48, 8]
+    # cv_out:
+      # - vco3
+    # gate_out:
+      # - eg5
+      # - eg6
+
+synthesizer:
+# track1
+  - 
+    type: vco
+    name: vco1
+    shape: 'square'
+    outputs:
+      - vcf1
+  - 
+    type: vcf
+    name: vcf1
+    q: 10
+    outputs:
+      - vca1
+  - 
+    type: vca
+    name: vca1
+    outputs:
+      - .destination
+  - 
+    type: eg
+    name: eg1
+    max: 0.3
+    attack: 0.25
+    decay: 0.1
+    sustain: 0.2
+    release: 0.2
+    outputs:
+      - vca1.gain
+  - 
+    type: eg
+    name: eg2
+    attack: 0.15
+    decay: 0.3
+    sustain: 0.3
+    release: 0.1
+    outputs:
+      - vcf1.frequency
+# track2
+  - 
+    type: vco
+    name: vco2
+    shape: 'sawtooth'
+    outputs:
+      - vcf2
+  - 
+    type: vcf
+    name: vcf2
+    q: 15
+    outputs:
+      - vca2
+  - 
+    type: vca
+    name: vca2
+    outputs:
+      - .destination
+  - 
+    type: eg
+    name: eg3
+    max: 0.04
+    attack: 0.4
+    decay: 0.8
+    sustain: 0.02
+    release: 0.1
+    outputs:
+      - vca2.gain
+  - 
+    type: eg
+    name: eg4
+    attack: 0.4
+    decay: 0.8
+    sustain: 0.8
+    release: 0.1
+    outputs:
+      - vcf2.frequency
+
+# track3
+  - 
+    type: vco
+    name: vco3
+    outputs:
+      - vcf3
+  - 
+    type: vcf
+    name: vcf3
+    q: 15
+    outputs:
+      - vca3
+  - 
+    type: vca
+    name: vca3
+    outputs:
+      - .destination
+  - 
+    type: eg
+    name: eg5
+    max: 0.04
+    attack: 0.1
+    decay: 0.8
+    sustain: 0.04
+    release: 0.1
+    outputs:
+      - vca3.gain
+  - 
+    type: eg
+    name: eg6
+    attack: 0.4
+    decay: 0.8
+    sustain: 0.8
+    release: 0.1
+    outputs:
+      - vcf3.frequency

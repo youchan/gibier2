@@ -59,6 +59,8 @@ module Gibier2
         node.each do |n|
           text << extract_text(n)
         end
+      when :code
+        text << "<span class='code'>#{node.string_content}</span>"
       end
 
       text
@@ -241,6 +243,7 @@ module Gibier2
 
     attr_reader :title
     attr_reader :id
+    attr_reader :metadata
 
     def self.from_header(header, page_num)
       (title, id) = self.extract_id(Content.extract_text(header.extract_children))
@@ -295,6 +298,10 @@ module Gibier2
       @contents << content if content
     end
 
+    def metadata=(metadata)
+      @metadata = metadata
+    end
+
     def contents_html
       @contents.map do |c|
         c.to_html
@@ -302,7 +309,7 @@ module Gibier2
     end
 
     def marshal_dump
-      to_html
+      [to_html, @metadata]
     end
 
     def to_html
@@ -320,7 +327,7 @@ module Gibier2
   end
 
   class Parser
-    def self.parse(content)
+    def self.parse(content, metadata)
       pages = []
       doc = Markly.parse(content)
       doc.each do |node|
@@ -328,10 +335,12 @@ module Gibier2
         case node.type
         when :header
           page = Page.from_header(node, pages.count + 1)
+          page.metadata = metadata[page.id] if metadata.has_key?(page.id)
 
           pages << page
         when :hrule
           page = Page.empty(pages.count + 1)
+          page.metadata = meatadata[page.id] if metadata.has_key?(page.id)
 
           pages << page
         else

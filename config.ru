@@ -1,6 +1,7 @@
 require 'drb/drb'
 require 'drb/websocket'
 require 'rouge'
+require 'yaml'
 require_relative 'parser'
 
 CONTENT_TYPES = {
@@ -8,13 +9,21 @@ CONTENT_TYPES = {
   '.jpg' => 'image/jpeg',
   '.jpeg' => 'image/jpeg',
   '.css' => 'text/css',
-  '.svg' => 'image/svg+xml'
+  '.svg' => 'image/svg+xml',
+  '.js' => 'text/javascript'
 }
 
 class Gibier
   def self.pages
     markdown = File.read('slide.md')
-    Gibier2::Parser.parse(markdown)
+    metayml = YAML.load_file('meta.yml')
+    metadata = metayml['slide'].each_with_object({}) do |page, obj|
+      if page['audio']
+        audio_metadata = YAML.load_file("#{page['audio']['name']}.yml")
+        obj[page['id']] = {'audio' => audio_metadata}
+      end
+    end
+    Gibier2::Parser.parse(markdown, metadata)
   end
 end
 

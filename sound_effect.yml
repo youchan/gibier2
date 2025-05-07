@@ -1,0 +1,168 @@
+sequencer:
+  tempo: 60
+  tracks:
+  - 
+    name: track1
+    notes: 
+      [ 57, 8]
+    cv_out:
+      - vco1
+    gate_out:
+      - eg1
+      - eg2
+      - eg3
+  - 
+    name: track2
+    notes: 
+      [ 45, 8]
+    cv_out:
+      - vco2
+    gate_out:
+      - eg4
+      - eg5
+  - 
+    name: track3
+    notes: 
+      [ 0, 2, 37, 6]
+    cv_out:
+      - vco3
+    gate_out:
+      - eg6
+      - eg7
+
+synthesizer:
+  - 
+    type: vco
+    name: vco1
+    shape: 'sawtooth'
+    outputs:
+      - vca1
+  - 
+    type: vca
+    name: vca1
+    outputs:
+      - vcf1
+  - 
+    type: vcf
+    name: vcf1
+    outputs:
+      - .destination
+  - 
+    type: eg
+    name: eg1
+    max: 0.4
+    attack: 3
+    decay: 5
+    sustain: 0.2
+    release: 3
+    outputs:
+      - vca1.gain
+  - 
+    type: eg
+    name: eg2
+    q: 200
+    attack: 4
+    decay: 5
+    sustain: 0.3
+    release: 3
+    outputs:
+      - vcf1.frequency
+# noise generator
+  - 
+    type: noise_generator
+    name: ng1
+    outputs:
+      - vca2
+  - 
+    type: vca
+    name: vca2
+    outputs:
+      - .destination
+  - 
+    type: eg
+    name: eg3
+    max: 0.1
+    attack: 2
+    decay: 8
+    sustain: 0.01
+    release: 3
+    outputs:
+      - vca2.gain
+
+# track2
+  - 
+    type: vco
+    name: vco2
+    shape: 'sawtooth'
+    outputs:
+      - vca3
+  - 
+    type: vca
+    name: vca3
+    outputs:
+      - vcf2
+  - 
+    type: vcf
+    name: vcf2
+    amount: 1.0
+    q: 100
+    outputs:
+      - .destination
+  - 
+    type: eg
+    name: eg4
+    max: 0.4
+    attack: 8
+    decay: 8
+    sustain: 0.2
+    release: 3
+    outputs:
+      - vca3.gain
+  - 
+    type: eg
+    name: eg5
+    attack: 6
+    decay: 5
+    sustain: 0.3
+    release: 3
+    outputs:
+      - vcf2.frequency
+
+# track3
+  - 
+    type: vco
+    name: vco3
+    shape: 'square'
+    outputs:
+      - vca4
+  - 
+    type: vca
+    name: vca4
+    outputs:
+      - vcf3
+  - 
+    type: vcf
+    name: vcf3
+    amount: 1.0
+    q: 100
+    outputs:
+      - .destination
+  - 
+    type: eg
+    name: eg6
+    max: 0.4
+    attack: 8
+    decay: 8
+    sustain: 0.2
+    release: 3
+    outputs:
+      - vca4.gain
+  - 
+    type: eg
+    name: eg7
+    attack: 6
+    decay: 5
+    sustain: 0.3
+    release: 3
+    outputs:
+      - vcf3.frequency

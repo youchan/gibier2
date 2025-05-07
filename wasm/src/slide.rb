@@ -1,12 +1,19 @@
 require 'js'
 require 'wasm_drb'
+require 'yaml'
 require_relative 'pages'
+require_relative 'audio'
 
 SLIDE_WIDTH = 1920
 SLIDE_HEIGHT = 1080
 
 uri = JS.global[:window][:location].to_s
 base_uri = uri.sub(/#\d+$/, '')
+
+JS.global[:window].addEventListener('onload', -> {
+  Fiber.new do
+  end.transfer
+})
 
 def update_page(page, top, left, zoom)
   slide = JS.global[:document].getElementsByClassName('slide')[0]
@@ -33,14 +40,20 @@ JS.global[:document].addEventListener('keydown') do |e|
     case e[:keyCode]
     when 39
       page = pages.next
-      slide[:innerHTML] = page.to_html
     when 37
       page = pages.prev
-      slide[:innerHTML] = page.to_html
     end
 
-    update_page(page, top, left, zoom)
-    JS.global[:window][:location] = pages.page_num == 0 ? base_uri : base_uri + "##{pages.page_num}"
+    if page
+      update_page(page, top, left, zoom)
+      @audio.stop if @audio
+      @audio = nil
+      if page.metadata && page.metadata['audio']
+        @audio = Gibier::Audio.new(page.metadata['audio'])
+        @audio.play
+      end
+      JS.global[:window][:location] = pages.page_num == 0 ? base_uri : base_uri + "##{pages.page_num}"
+    end
   end.transfer
 end
 

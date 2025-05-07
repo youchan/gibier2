@@ -1,302 +1,233 @@
-# dRuby on Browser Again! {#cover}
+# ruby.wasmでシンセサイザーをつくる方法 {#cover}
+
 %author: Yoh Osaki a.k.a @youchan
-%author: Shigeru Nakajima a.k.a @ledsun
 ![icon](images/youchan_square.jpeg)
-![icon](images/ledsun.png)
-
-## Books
-
-%center: Sale on 2F book stores
-
-![books](images/books.png)
 
 ## Who am I
 
 - youchan
 - ANDPAD Inc.
-  - RubyKaigi Platinum suponsor
-  - Ask the speaker => Day2 Lunch time 13:10～
-- Author of [Gibier](https://github.com/youchan/gibier)
-- RubyKaigi 2015～2017
-  - Writing web application in Ruby (2015)
-  - Isomorphic web programming in Ruby (2016)
-  - dRuby on Browser (2017)
+- Author of [Gibier2](https://github.com/youchan/gibier2)
+- RubyKaigi 2025
+  - 「dRuby on Browser Again!」
 
-# dRuby on Browser Again!
+# 今日はアナログシンセサイザーの話をします
 
----
+## 私のヒーロー
 
-![ruby.wasm_loves_dRuby](images/ruby.wasm_loves_dRuby.png)
+![keith_emerson](images/keith_emerson.jpg)
 
-## What's ruby.wasm
+%center: キース・エマーソン
 
-![whats_ruby_wasm](images/whats_rubywasm.png)
+## Moog シンセサイザー {#moog}
 
-## What's dRuby
+What's moog
 
-![whats_dRuby](images/whats_druby.png)
+- アナログシンセサイザーの元祖的な存在
+- モジュラーシンセサイザー
+- 箪笥
 
-# Why? dRuby with ruby.wasm
+![right](images/moog.jpeg)
 
-## No need JSON API
+## アナログシンセサイザー
 
-![No_need_JSON_API](images/no_need_json_api.png)
+![analog_synth](images/analog_synth.png)
 
-## Easy to share objects inter browsers
+%center: すべて電圧で制御されるアナログの電子回路
 
-![Share_objects](images/share_objects.png)
+## デジタル時代のシンセサイザー
+
+- FM音源
+- サンプリング
+- 物理モデリング
+- アナログモデリング
+
+![DX7](images/YAMAHA_DX7.jpg)
+
+## なぜアナログなのか？
+
+- デジタルならばどんな音も作れてしまう
+  - 生楽器の音を再現することに関してはかなり近づいている
+  - 現在のデジタルシンセサイザーはハイブリッド
+- シンセサイザーの楽器としての音とは何か？
+  - 制約のあるアナログシンセサイザーのシンセサイザーらしさ
+  - チップチューンがひとつの分野を築いている
+  - もちろんデジタルシンセサイザーの音というのもある。FM音源とか80's
 
 # Demo
 
-## Introduce drb-websocket/wasm_drb
+%center: アナログシンセサイザーっぽい音
 
-- drb-websocket
-  - WebSocket protocol plugin for dRuby.
-  - Using faye-websocket
-  - Standalone mode or Rack middleware mode
-- wasm_drb
-  - dRuby implementation for ruby.wasm
-  - dRuby client **and server** implementation in ruby.wasm
+## アナログシンセサイザーを作る {#demo}
 
-## Rack middleware mode
+- 実際はアナログモデリングシンセサイザーです
+- Gibier2で動く！
+  - もしかしたら世界初のシンセサイザー搭載のプレゼンツールかも
+- モジュラー構造で拡張可能
+- Web Audio APIでブラウザで動く
+- ruby.wasmでRubyで実装する
+- 参考
+  - [websynthv2](https://aikelab.net/websynthv2/)
+  - [https://www.g200kg.com/jp/docs/webaudio/index.html](https://www.g200kg.com/jp/docs/webaudio/index.html)
 
-drb-websocket has the Rack middleware mode.
+## Gibier Synth
 
-```ruby
-app = Rack::Builder.app do
-  server = Server.new(host: 'localhost')
-  map '/' do
-    use DRb::WebSocket::RackApp
-  end
-  run server
-end
-```
+![gibier_synth](images/gibier_synth.png)
 
-## Callbacks
+## Web Audio API
 
-wasm_drb has a server side implementation.
-
-```ruby
-remote = DRbObject.new_with_uri 'ws://127.0.0.1:1234'
-DRbObject.start_service 'ws://127.0.0.1:1234/callback' # Run as a server
-
-remote.each do |x|
-  x.do_something # This is running on client
-end
-```
-
-## Demo
-
-![QR](images/qr-niconico-drb.svg)
-
-## Gibier2
-
-![gibier2](images/gibier2.png)
-
-## Async probrems
-- The interface changes depending on whether it is stub object or not.
-  - If the object is a stub, a method call returns Promise object.
-- The back and forth between the world of wasm and the world of JS, is done through a complex mechanism.
-  - What works as a Fiber in the Ruby world is realized as a Promise in the JS world, and the two worlds are integrated by Asyncify.
-
-## Async probrems
-
-Failure case.
-
-```ruby
-button.addEventListener('click') do
-  remote.func.await # calling method of a stub object
-end
-```
-
-Correct as following
-
-```ruby
-buttonel.addEventListener('click') do
-  Fiber.new do
-    remote.func.await # calling method of a stub object
-  end.transfer
-end
-```
-## Conclusion
-
-- The advantages of combining dRuby and ruby.wasm were explained.
-- I introduced `drb-websocket` and `wasm_drb`, a set of tools to realize dRuby in Browser.
-- The demonstrations and the tool were presented to show how it actually work.
-- I pointed out the asynchronous issues in ruby.wasm.
-
-%center: Enjoy next @ledsun's presentation.
-
-# @ledsun's part
-
-## Introduction
-
-My name is ledsun, a Rubyist who enjoys running Ruby in the browser using ruby.wasm as a hobby.
-Last year at RubyKaigi, I gave a talk on this topic.
-[https://rubykaigi.org/2024/presentations/ledsun.html#day3](https://rubykaigi.org/2024/presentations/ledsun.html#day3)
-If you saw my talk last year, thank you! If not, don't worry—this year’s talk builds on it, but stands on its own.
-
-## Introduction
-
-This year, by coincidence, I was working on the same theme as youchan.
-I decided to borrow part of youchan's presentation time to share my work.
-We each took different approaches to achieve the same goal.
-I hope you enjoy seeing the differences between our approaches.
-
-dRuby can be run on any network protocol by implementing a module called a protocol.
-By implementing a protocol module that uses WebSocket, dRuby can be run in the browser.
-
-Up to this point, the approach is the same as youchan's.
-
-## ledsun's approach
-
-What did I do to run dRuby in the browser?
-
-I created a library that abstracts WebSocket communications.
-It's a library that allows you to use WebSocket communication with the same interface from both CRuby and Ruby running in the browser.
-
-It's called Wands.
-[https://rubygems.org/gems/wands](https://rubygems.org/gems/wands)
-
-## Wands Features
-
-The key feature of Wands is that it provides the same interface for WebSocket communication in both CRuby and the browser.
-It has an API similar to TCPSocket, which is commonly used in Ruby.
-
-```ruby
-socket = Wands::WebSocket.open('localhost', 2345)
-socket.puts("Hello World!")
-puts socket.gets
-socket.close
-```
-
-This code works the same way in both CRuby and the browser.
-
-## Wands in Action (Simulated)
-
-For example, here's the kind of communication that's possible:
-
-CRuby Server (localhost:2345)
-
-```ruby
-#server.rb
-require "wands/web_socket_server"
-
-server = Wands::WebSocketServer.open("localhost", 2345)
-socket = server.accept
-puts socket.gets  # => "Hello from the browser!"
-socket.puts "Hello from CRuby!"
-```
-
----
-
-Browser Client (ruby.wasm)
-
-```ruby
-# client.rb
-require "wands/web_socket"
-
-socket = Wands::WebSocket.open('localhost', 2345)
-socket.puts "Hello from the browser!"
-puts socket.gets  # => "Hello from CRuby!"
-```
-
-Thus, WebSocket communication is possible between the browser and CRuby.Moreover, the code you write is ordinary TCPSocket-like.
-
-## What's the benefit?
-
-With Wands, you can run WebSocket code written in CRuby in the browser without any changes. For example, you can confirm that an algorithm works in CRuby or irb and then run it in the browser.
-
-## Technical Challenges
-
-Differences between CRuby and JavaScript WebSockets
-The message receiving APIs in particular differ between synchronous and asynchronous approaches.
-
-```ruby
-# Ruby
-puts socket.gets
-```
+VCO
 
 ```javascript
-// JavaScript
-ws.onmessage = function(event) {
-  console.log(event.data);
-};
+let context = new AudioContext();
+let oscillator = context.createOscillator();
 ```
 
-Wands bridges this gap. It provides an API similar to Ruby's TCPSocket, which is familiar to Rubyists.
+VCF
 
-## Wands Architecture
-
-How is this possible?
-
-```
-++=======================================++
-||       Ruby TCPSocket like API         ||
-++---------------------------------------++
-||       WebSocket Implementaiton        ||
-|| +-----------------------------------+ ||
-|| | Ruby impl          | JS API impl  | ||
-|| +---------------------------------- + ||
-++=======================================++
-|| Ruby TCPSocket class |   Browser      ||
-++---------------------------------------++
-||                 OS                    ||
-++=======================================++
+```javascript
+let filter = context.createBiquadFilter();
 ```
 
-## Switching between CRuby and JavaScript
+VCA
 
-When running Wands in the browser, it depends on the JS gem. This allows us to switch WebSocket implementations based on whether the JS constant is defined or not. Specifically, we switch between CRuby and JavaScript using prepend.
+```javascript
+let gain = context.createGain();
+```
+
+## ruby.wasm
+
+VCO
 
 ```ruby
-# We override methods dynamically by prepending a module in the browser.
-prepend JavaScript::WebSocket if defined? JS
+context = JS.global[:AudioContext].new
+oscillator = context.createOscillator()
 ```
 
-##  Waiting for Asynchronous APIs
+VCF
 
-This is a very interesting aspect that's characteristic of Ruby in the browser. The JS gem in ruby.wasm has a feature called Promise Scheduler. This allows you to wait for a Promise to complete. If you can call Promise.resolve method from the callback function of an asynchronous API, you can wait for the asynchronous API to complete.
+```ruby
+filter = context.createBiquadFilter()
+```
+
+VCA
+
+```ruby
+gain = context.createGain()
+```
+
+## Synthesizer class
+
+```ruby
+class Synthesizer
+  CCLASSES = {
+    'vca' => VCA,
+    'vco' => VCO,
+    'vcf' => VCF,
+    'noise_generator' => NoiseGenerator,
+    'eg' => EG
+  }
+
+  def initialize(audio, nodes)
+    @audio_nodes = {}
+    outputs_table = {}
+    nodes.each do |node|
+      @audio_nodes[node['name']] = CCLASSES[node['type']].new(audio, node || {})
+      outputs_table[node['name']] = node['outputs'] if node['outputs']
+    end
+    # ...snip
+  end
+end
+```
+
+## Synthesizer params
+
+```yaml
+synthesizer:
+  - 
+    type: vco
+    name: vco
+    outputs:
+      - vca
+  - 
+    type: vca
+    name: vca
+    outputs:
+      - .destination
+  - 
+    type: eg
+    name: eg
+    attack: 0.1
+    #...snip
+    outputs:
+      - vca.gain
+
+```
+
+## AudioParam
+
+- Web Audio APIの`AudioParam`クラス
+- EG(Envelop Generator)に使用
+- Web Audio APIは各種パラメータが`AudioParam`として表わされている
+
+```ruby
+class EG
+  def note_on
+    crrent_time = @audio.context[:currentTime].to_f
+    @audio_param.setTargetAtTime(@max, current_time, @attack)
+    @audio_param.setTargetAtTime(@sustain, current_time + @attack, @decay)
+  end
+
+  def note_off
+    @audio_param.setTargetAtTime(0.0, @audio.context[:currentTime], @release)
+  end
+end
+```
+
+## Sequencer
+
+- シーケンサーは音程と長さだけ
+- JSの`setTimeout`で実現している => インターバルを短かくすると不安定になる
+- すべて`AudioParam`で制御してもよかったかもしれないがモジュール構成との共存が難しい
+
+```yaml
+sequencer:
+  tempo: 145
+  tracks:
+  - 
+    name: track1
+    notes: 
+      [69, 2, 69, 2, 67, 1, 72, 2, 65, 4, 60, 1, 62, 1, 64, 2, 55, 17, ...]
+    cv_out:
+      - vco1
+    gate_out:
+      - eg1
+      - eg2
+```
+
+# Demo
+
+## Asakusa.rb {#ruby_tuesday}
+
+%center: Asakusa.rbから来ました。Ruby Tuesdayに活動しています。
+
+![asakusa](images/asakusa.png)
+
+## もっとつくりたかったものたち
+
+- MIDI入力
+- FM音源
+- 音声ファイルの再生
+  - 効果音
+  - ドラム音源
+- 音声のビジュアライズ
+  - スペクトル
+  - 波形
+  - ビジュアルエフェクト
+- ボコーダー
+- エディター
 
 ---
 
-In a generalized form, it looks like this:
-
-```ruby
-def pop
-  resolve = nil
-  promise = JS.global[:Promise].new { resolve = it }
-  @resolve = resolve
-  promise.await # wait for promise
-end
-
-def push(message)
-  @resolve.apply message # resolve promise
-end
-```
-
-## Unit Testing
-
-When writing a library for Ruby in the browser, one challenging aspect is how to run unit tests.
-You can't run them using only CRuby.
-On the other hand, launching a browser to execute tests is too cumbersome.
-In Wands, I run tests for JavaScript environment features using Node.js's Node WASI.This mechanism was referenced from ruby.wasm's unti test code.
-
-## Socket programming in the browser
-
-Wands abstracts WebSocket communication in its implementation. Conceptually, it can also be said to abstract TCP sockets.
-
-With Wands, you can run socket programming code written in CRuby in your browser, although you will need to replace the TCPSocket class.
-
-Wands provides a new concept called **Socket programming in the browser**.
-
-Since you can do socket programming in the browser, dRuby can definitely run there too. However, this is limited to the client side.
-
-## Conclusion
-
-By the way, the name Wands is derived from Web + And + Socket = WANDS.
-but it also means "Magic Wand".
-
-Imagine writing your usual TCPSocket code and just... running it in the browser. That’s the kind of _magic Wands_ enables.
-
-I hope Wands inspires you to try socket programming in your browser with Ruby! Thank you!
+まだまだ開発したいものがいっぱい！！！
+otoイベントの次回も期待しています！

@@ -3,3 +3,4 @@ rubies/
 dist/*
 Gemfile.lock
 .DS_Store
+*.swp

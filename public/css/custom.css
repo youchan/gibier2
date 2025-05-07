@@ -1,3 +1,9 @@
+.aoboshi-one-regular {
+  font-family: "Aoboshi One", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .page {
   background-image: url("/images/background.png");
   color: #222;
@@ -38,33 +44,63 @@
   width: 128px;
 }
 
-.books img {
-  margin: auto;
-  display: block;
-  width: 80%;
+.slide .page-header {
+  margin-top: 0em;
+  font-family: "Aoboshi One", serif;
 }
 
-.QR img {
-  margin: auto;
-  display: block;
-  width: 35%;
+.slide h2.page-header {
+  color: #ffffff;
 }
 
-.whats_ruby_wasm img {
+.keith_emerson img {
   margin: auto;
   display: block;
+  width: 70%;
 }
 
-.whats_druby img {
-  margin: auto;
-  display: block;
-  width: 80%;
+.center {
+  margin-top: 1em;
 }
 
-.No_need_JSON_API img {
+#moog ul {
+  float: left;
+}
+
+#moog .right {
+  float: right;
+  width: 600px;
+}
+
+#moog .right img {
   margin: auto;
   display: block;
-  width: 80%;
+  width: 100%;
+}
+
+.analog_synth img {
+  margin: auto;
+  display: block;
+  width: 90%;
+}
+
+.DX7 img {
+  margin: auto;
+  display: block;
+  width: 50%;
+  float: right;
+}
+
+.gibier_synth img {
+  margin: auto;
+  display: block;
+  width: 90%;
+}
+
+.asakusa img {
+  margin: auto;
+  display: block;
+  width: 60%;
 }
 
 .Share_objects img {
@@ -82,7 +118,7 @@
 .center {
   text-align: center;
   font-size: 120%;
-  margin-top: 2em;
+  margin-top: 1em;
 }
 
 a:link {

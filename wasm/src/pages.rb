@@ -4,12 +4,17 @@ require 'uri'
 
 module Gibier2
   class Page
+    def metadata
+      @metadata
+    end
+
     def to_html
       @html
     end
 
     def marshal_load(obj)
-      @html = obj
+      @html = obj[0]
+      @metadata = obj[1]
     end
   end
 
