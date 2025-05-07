@@ -1,0 +1,21 @@
+synthesizer:
+- 
+  type: vco
+  name: vco1
+  outputs:
+    - vca1
+- 
+  type: vca
+  name: vca1
+  outputs:
+    - .destination
+- 
+  type: eg
+  name: eg1
+  params:
+    attack: 0.1
+    decay: 0.2
+    sustain: 0.1
+    release: 0
+  outputs:
+    - vca1.gain

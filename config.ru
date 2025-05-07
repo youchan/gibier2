@@ -8,7 +8,8 @@ CONTENT_TYPES = {
   '.jpg' => 'image/jpeg',
   '.jpeg' => 'image/jpeg',
   '.css' => 'text/css',
-  '.svg' => 'image/svg+xml'
+  '.svg' => 'image/svg+xml',
+  '.js' => 'text/javascript'
 }
 
 class Gibier
