@@ -24,7 +24,7 @@
 #cover .author {
   position: relative;
   float: right;
-  margin-top: 3em;
+  margin-top: 1em;
   right: 3em;
 }
 
@@ -44,33 +44,46 @@
   width: 80%;
 }
 
-.QR img {
+.Rubyist_bulk_load img {
   margin: auto;
   display: block;
-  width: 35%;
+  width: 100%;
 }
 
-.whats_ruby_wasm img {
+.road_to_tokushima img {
   margin: auto;
   display: block;
+  width: 95%;
 }
 
-.whats_druby img {
+.awa img {
   margin: auto;
   display: block;
   width: 80%;
 }
 
-.No_need_JSON_API img {
+.speaker img {
+  margin:  auto;
+  display: block;
+  width: 70%;
+}
+
+.code_party img {
   margin: auto;
   display: block;
   width: 80%;
 }
 
-.Share_objects img {
+.proposal img {
   margin: auto;
   display: block;
-  width: 80%;
+  width: 40%;
+}
+
+.tkskkd img {
+  margin: auto;
+  display: block;
+  width: 60%;
 }
 
 .gibier2 img {

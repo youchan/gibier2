@@ -197,7 +197,6 @@ module Gibier2
     include Content
 
     def initialize(node)
-      p node
       @url = node.url
       @content = extract_text(node.extract_children)
     end
