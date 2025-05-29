@@ -31,6 +31,9 @@ app = DRb::WebSocket::RackApp.new(Proc.new {|env|
   when '/dist/app.wasm'
     js = File.read('./dist/app.wasm')
     [200, { 'content-type' => 'application/wasm' }, [js] ]
+  when '/dist/app.wasm.gz'
+    js = File.read('./dist/app.wasm.gz')
+    [200, { 'content-type' => 'application/gzip' }, [js] ]
   when '/css/highlight.css'
     css = Rouge::Themes::Base16.mode(:dark).render(scope: '.highlight')
     [200, { 'content-type' => 'text/css' }, [css] ]

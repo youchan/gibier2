@@ -21,7 +21,10 @@
     </div>
     <script type="module">
       import { DefaultRubyVM } from "https://cdn.jsdelivr.net/npm/@ruby/wasm-wasi@2.7.1/dist/browser/+esm";
-      const response = await fetch("/dist/app.wasm");
+      const response = fetch("/dist/app.wasm.gz")
+        .then(response => response.blob())
+        .then(blob => blob.stream().pipeThrough(new DecompressionStream('gzip')))
+        .then(stream => new Response(stream, { headers: { 'Content-Type': 'application/wasm' } }))
       const module = await WebAssembly.compileStreaming(response);
       const { vm } = await DefaultRubyVM(module);
 

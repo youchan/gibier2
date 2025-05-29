@@ -21,6 +21,7 @@ bundle exec rbwasm build -o dist/ruby.wasm
 Pack gibier2 source code into ruby.wasm
 ```sh
 bundle exec rbwasm pack ../dist/ruby.wasm --dir ./src::/src -o ../dist/app.wasm
+rake compress
 ```
 
 Setup server-side

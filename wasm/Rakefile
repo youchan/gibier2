@@ -1,7 +1,22 @@
+require 'zlib'
+
 file '../dist/ruby.wasm' do
   system('bundle exec rbwasm build -o ../dist/ruby.wasm')
 end
 
 task :build => ['../dist/ruby.wasm'] do
   system('bundle exec rbwasm pack ../dist/ruby.wasm --dir ./src::/src -o ../dist/app.wasm')
+end
+
+task :compress do
+  input_file = '../dist/app.wasm'
+  output_file = '../dist/app.wasm.gz'
+
+  Zlib::GzipWriter.open(output_file) do |gz|
+    File.open(input_file, 'rb') do |file|
+      gz.write(file.read)
+    end
+  end
+
+  puts "Compressed #{input_file} to #{output_file}"
 end
