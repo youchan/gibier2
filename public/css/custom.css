@@ -1,15 +1,24 @@
+body {
+  font-family: "Bellota Text", "Kosugi Maru", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .page {
-  background-image: url("/images/background.png");
   color: #222;
+  background-color: #eee;
+  border-top: 68px solid #cef;
+  border-bottom: 36px solid #cef;
+  box-sizing: border-box;
 }
 
-#cover {
-  background-image: url("/images/background_cover.png");
-  color: #fff;
-}
-
-#cover .page-header {
-  top: 12%;
+.page:after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  border-top: 24px solid #cef;
+  width: 100%;
 }
 
 .slide .page-header {
@@ -38,33 +47,36 @@
   width: 128px;
 }
 
-.books img {
+.druby_on_browser_again img {
   margin: auto;
   display: block;
   width: 80%;
 }
 
-.QR img {
+.thinking_face img {
   margin: auto;
   display: block;
-  width: 35%;
+  width: 30%;
 }
 
-.whats_ruby_wasm img {
-  margin: auto;
-  display: block;
-}
-
-.whats_druby img {
+.druby_on_browser img {
   margin: auto;
   display: block;
   width: 80%;
 }
 
-.No_need_JSON_API img {
+.ruby_wasm_vs_opal img {
   margin: auto;
   display: block;
   width: 80%;
+}
+
+.cat img {
+  position: absolute;
+  display: block;
+  top: 10%;
+  right: 0;
+  width: 40%;
 }
 
 .Share_objects img {
