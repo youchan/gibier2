@@ -1,4 +1,7 @@
+# await: true
+
 require 'native'
+require 'await'
 require_relative 'gibier2/parser.rb'
 
 SLIDE_WIDTH = 1920
@@ -16,6 +19,12 @@ def update_page(page, top, left, zoom)
   page_el.style.top = "#{top}px"
   page_el.style.left = "#{left}px"
   page_el.style.zoom = "#{zoom}"
+end
+
+def load_slide(slide_name)
+  data = $$.fetch("/slides/#{slide_name}/slide.md").__await__
+  content = Native(data).text.__await__
+  Gibier2::Parser.parse(content)
 end
 
 height = $$.innerHeight.to_f
@@ -41,11 +50,8 @@ $$.document.addEventListener('keydown') do |event|
   $$.location = pages.page_num == 0 ? base_uri : base_uri + "##{pages.page_num}"
 end
 
-$$.fetch('slide.md').then do |data|
-  Native(data).text.then do |content|
-    pages = Gibier2::Parser.parse(content)
-    num = uri.match?(/#\d+$/) ? uri.match(/#(\d+)$/)[1].to_i : 0
-    page = pages.page(num)
-    update_page(page, top, left, zoom)
-  end
-end
+m = uri.match(/\/(?<event>\w+)\/(?<num>#\d+)?$/)
+pages = load_slide(m[:event]).__await__
+num = m[:num]&.sub(/\A#/, '').to_i || 0
+page = pages.page(num)
+update_page(page, top, left, zoom)

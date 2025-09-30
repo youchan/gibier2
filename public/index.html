@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/dark.min.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/application.css">
+    <link rel="stylesheet" href="/css/custom.css">
+  </head>
+  <body>
+    <div class="gibier">
+      <div class="background">
+        <div class="background-filter">
+          <div class="slide-control">
+            <div class="page-back"></div>
+            <div class="page-foward"></div>
+            <div class="slide" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      import hljs from 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js';
+      //  and it's easy to individually load additional languages
+      import ruby from 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/languages/ruby.min.js';
+      hljs.registerLanguage('ruby', ruby);
+      window.hljs = hljs;
+    </script>'
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="text/javascript" src="/slide.js"></script>
+
+  </body>
+</html>
+
